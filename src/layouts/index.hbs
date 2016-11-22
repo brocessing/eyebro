@@ -7,12 +7,15 @@
   {{#if compiler.isProduction}}
   <link rel="stylesheet" href="bundle-{{compiler.hash}}.css">
   {{/if}}
+<script src="./static/clmtrackr.js"></script>
+<script src="./static/models/model_pca_20_svm.js"></script>
 </head>
 <body>
   <main>
-    <img src="brostart.gif" alt="brostart logo">
-    <p>{{nl2br message}}</p>
-  </main>
+    <video id="webcam" width="400" height="300" autoplay="true">
+    </video>
+<!--     <input class="btn" type="button" value="wait, loading video" disabled="disabled" onclick="startVideo()" id="startbutton"></input>
+ -->  </main>
   <script src="bundle-{{compiler.hash}}.js"></script>
 </body>
 </html>
