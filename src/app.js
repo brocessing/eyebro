@@ -3,20 +3,62 @@ console.log(`It's working !`)
 // We define our video input as the <video> tag (id = webcam)
 var webcam = document.getElementById('webcam');
 
-// var ctracker = new clm.tracker({useWebGL : true});
-// ctracker.init(pModel);
-// // ctracker.start(webcam);
+// Webcam stuff
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+ 
+if (navigator.getUserMedia) {       
+    navigator.getUserMedia({video: true}, handleVideo, videoError);
+}
+ 
+function handleVideo(stream) {
+    webcam.src = window.URL.createObjectURL(stream);
+}
+ 
+function videoError(e) {
+    console.log("Camera not working.");
+}
 
-// // Get current face data positions at every frame
-// function positionLoop() {
-// 	requestAnimationFrame(positionLoop);
-// 	var positions = ctracker.getCurrentPosition();
-// 	console.log("position 15 = " + positions[15][1]);
-// 	// positions = [[x_0, y_0], [x_1,y_1], ... ]
-// 	// do something with the positions ...
-// }
 
-//   positionLoop();
+var ctracker = new clm.tracker({useWebGL : true});
+ctracker.init(pModel);
+ctracker.start(webcam);
+
+// Get current face data positions at every frame
+function positionLoop() {
+	requestAnimationFrame(positionLoop);
+	var positions = ctracker.getCurrentPosition();
+	
+	// var positionString = "";
+         if (positions) {
+           // for (var p = 0;p < 10;p++) {
+              //positionString += "featurepoint "+p+" : ["+positions[p][0].toFixed(2)+","+positions[p][1].toFixed(2)+"]<br/>";
+           // }
+           //console.log(positionString);
+           console.log("positions x = " + positions[15][0] + "\nposition y = " + positions[15][1]);
+         }
+
+	// positions = [[x_0, y_0], [x_1,y_1], ... ]
+	// do something with the positions ...
+}
+
+  positionLoop();
+
+// Draw the face
+var canvasInput = document.getElementById('drawCanvas');
+var cc = canvasInput.getContext('2d');
+
+function drawLoop() {
+    requestAnimationFrame(drawLoop);
+    cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
+    ctracker.draw(canvasInput);
+  }
+
+   drawLoop();
+
+
+
+
+  // ----------------- STUFF I DON'T NEED RIGHT NOW BUT I LEFT IT HERE FOR THE MOMENT ----------------------
 
 
 // function enablestart() {
@@ -65,31 +107,6 @@ var webcam = document.getElementById('webcam');
 // 	// start loop to draw face
 // 	// drawLoop();
 // }
-
-
-
-// Webcam
- 
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
- 
-if (navigator.getUserMedia) {       
-    navigator.getUserMedia({video: true}, handleVideo, videoError);
-}
- 
-function handleVideo(stream) {
-    webcam.src = window.URL.createObjectURL(stream);
-}
- 
-function videoError(e) {
-    // do something
-}
-
-
-
-
-
-
-  // ----------------- STUFF I DON'T NEED RIGHT NOW BUT I LEFT IT HERE FOR THE MOMENT ----------------------
 
 
 // 	var overlay = document.getElementById('overlay');

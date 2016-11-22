@@ -7,15 +7,35 @@
   {{#if compiler.isProduction}}
   <link rel="stylesheet" href="bundle-{{compiler.hash}}.css">
   {{/if}}
-<script src="./static/clmtrackr.js"></script>
-<script src="./static/models/model_pca_20_svm.js"></script>
 </head>
+
 <body>
+
   <main>
-    <video id="webcam" width="400" height="300" autoplay="true">
+    <video id="webcam" width="640" height="480" autoplay="true">
     </video>
-<!--     <input class="btn" type="button" value="wait, loading video" disabled="disabled" onclick="startVideo()" id="startbutton"></input>
- -->  </main>
+    <canvas id="drawCanvas" width="640" height="480"></canvas>
+  </main>
+
+  <script src="clmtrackr.js"></script>
+  <script src="models/model_pca_20_svm.js"></script>
+
+  <script src="ext_js/utils.js"></script>
+  <script src="ext_js/jsfeat-min.js"></script>
+  <script src="ext_js/frontalface.js"></script>
+  <script src="ext_js/jsfeat_detect.js"></script>
+  <script src="ext_js/numeric-1.2.6.min.js"></script>
+  <script src="ext_js/mosse.js"></script>
+  <script src="ext_js/left_eye_filter.js"></script>
+  <script src="ext_js/right_eye_filter.js"></script>
+  <script src="ext_js/nose_filter.js"></script>
+  <script src="js/clm.js"></script>
+  <script src="js/svmfilter_webgl.js"></script>
+  <script src="js/svmfilter_fft.js"></script>
+  <script src="js/mossefilter.js"></script>
+  <script src="ext_js/Stats.js"></script>
+
   <script src="bundle-{{compiler.hash}}.js"></script>
 </body>
+
 </html>
