@@ -2,9 +2,16 @@ console.log(`It's working !`)
 
 // We define our video input as the <video> tag (id = webcam)
 var webcam = document.getElementById('webcam');
+// Define a new tracker object
+var ctracker = new clm.tracker({useWebGL : true});
+// We initialize the object with a model and start it for the webcam stream
+ctracker.init(pModel);
+ctracker.start(webcam);
 
-// Webcam stuff
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+// Access to webcam stuff
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia 
+|| navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
  
 if (navigator.getUserMedia) {       
     navigator.getUserMedia({video: true}, handleVideo, videoError);
@@ -15,30 +22,36 @@ function handleVideo(stream) {
 }
  
 function videoError(e) {
-    console.log("Camera not working.");
+    console.log("Camera stream is not working, please allow access or try on a recent browser.");
 }
 
-
-var ctracker = new clm.tracker({useWebGL : true});
-ctracker.init(pModel);
-ctracker.start(webcam);
 
 // Get current face data positions at every frame
 function positionLoop() {
 	requestAnimationFrame(positionLoop);
 	var positions = ctracker.getCurrentPosition();
-	
-	// var positionString = "";
-         if (positions) {
-           // for (var p = 0;p < 10;p++) {
-              //positionString += "featurepoint "+p+" : ["+positions[p][0].toFixed(2)+","+positions[p][1].toFixed(2)+"]<br/>";
-           // }
-           //console.log(positionString);
-           console.log("positions x = " + positions[15][0] + "\nposition y = " + positions[15][1]);
-         }
+// Doing stuff with positions in a if statement, otherwise positions return null  
+      if (positions) {
+    //     for (var p = 15; p <= 18; p++) {
+    //     console.log("positions x = " + positions[p][0] + "\nposition y = " + positions[p][1]); 
+    // }
+      var eyebrowLeftHeight = positions[19][1] + positions[20][1] + positions[21][1] + positions[22][1];
+      var eyebrowLeftOK = eyebrowLeftHeight / 4;
+      var eyebrowRightHeight = positions[18][1] + positions[17][1] + positions[16][1] + positions[15][1];
+      var eyebrowRightOK = eyebrowRightHeight / 4;      
+      console.log("eyebrow left height : " + eyebrowLeftOK + "\neyebrow right height : " + eyebrowRightOK
+        + "\nnose : = " + positions[33][1]);
 
-	// positions = [[x_0, y_0], [x_1,y_1], ... ]
-	// do something with the positions ...
+	// Callback if the tracking fit your face or not
+	  var ok = "Your face is successfuly tracked !";
+	  var notok = "Tracking not working...";
+	  var score = ctracker.getScore();
+	  if(score > 0.60) {
+		document.getElementById('tracked').innerHTML = ok;
+	  } else {
+		document.getElementById('tracked').innerHTML = notok;
+	  }
+	}
 }
 
   positionLoop();
