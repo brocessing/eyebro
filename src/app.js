@@ -5,11 +5,6 @@ console.log(`It's working !`)
 
 // We define our video input as the <video> tag (id = webcam)
 var webcam = document.getElementById('webcam');
-// Define a new tracker object
-var ctracker = new clm.tracker({useWebGL : true});
-// We initialize the object with a face model and start to track the webcam stream
-ctracker.init(pModel);
-ctracker.start(webcam);
 
 
 /* ------------------------------------------------------------------- */
@@ -33,40 +28,11 @@ function videoError(e) {
 }
 
 
-/* ------------------------------------------------------------------- */
-
-
-// Get current face data positions at every frame
-function positionLoop() {
-	requestAnimationFrame(positionLoop);
-	var positions = ctracker.getCurrentPosition();
-// Put "positions" in an if statement (otherwise positions return null) 
-      if (positions) {
-
-    //     for (var p = 15; p <= 18; p++) {
-    //     console.log("positions x = " + positions[p][0] + "\nposition y = " + positions[p][1]); 
-    // }
-
-      var eyebrowLeftHeight = positions[19][1] + positions[20][1] + positions[21][1] + positions[22][1];
-      var eyebrowLeftOK = eyebrowLeftHeight / 4;
-      var eyebrowRightHeight = positions[18][1] + positions[17][1] + positions[16][1] + positions[15][1];
-      var eyebrowRightOK = eyebrowRightHeight / 4;      
-      console.log("eyebrow left height : " + eyebrowLeftOK + "\neyebrow right height : " + eyebrowRightOK
-        + "\nnose : = " + positions[33][1]);
-
-	// Callback if the tracking fit your face or not
-	  var ok = "Your face is successfuly tracked !";
-	  var notok = "Tracking not working...";
-	  var score = ctracker.getScore();
-	  if(score > 0.65) {
-		document.getElementById('tracked').innerHTML = ok;
-	  } else {
-		document.getElementById('tracked').innerHTML = notok;
-	  }
-	}
-}
-
-  positionLoop();
+// Define a new tracker object
+var ctracker = new clm.tracker({useWebGL : true});
+// We initialize the object with a face model and start to track the webcam stream
+ctracker.init(pModel);
+ctracker.start(webcam);
 
 
 /* ------------------------------------------------------------------- */
@@ -83,40 +49,89 @@ function drawLoop() {
   }
 
    drawLoop();
+   
 
 /* ------------------------------------------------------------------- */
 
+// Get current face data positions at every frame
+function positionLoop() {
+	requestAnimationFrame(positionLoop);
+	var positions = ctracker.getCurrentPosition();
+// Put "positions" in an if statement (otherwise positions return null) 
+      if (positions) {
+
+    //     for (var p = 15; p <= 18; p++) {
+    //     console.log("positions x = " + positions[p][0] + "\nposition y = " + positions[p][1]); 
+    // }
+
+      var eyebrowLeftHeight = positions[19][1] + positions[20][1] + positions[21][1] + positions[22][1];
+      var eyebrowLeftOK = eyebrowLeftHeight / 4;
+      var eyebrowRightHeight = positions[18][1] + positions[17][1] + positions[16][1] + positions[15][1];
+      var eyebrowRightOK = eyebrowRightHeight / 4;      
+      /*console.log("eyebrow left height : " + eyebrowLeftOK + "\neyebrow right height : " + eyebrowRightOK
+        + "\nnose : = " + positions[33][1]);*/
+
+	// Callback if the tracking fit your face or not
+	  var ok = "Your face is successfuly tracked !";
+	  var notok = "Tracking not working...";
+	  var score = ctracker.getScore();
+	  if(score > 0.50) {
+		document.getElementById('tracked').innerHTML = ok;
+	  } else {
+		document.getElementById('tracked').innerHTML = notok;
+	  }
+
+	// Draw the face bounding box  
+	  var myBox = getAABB(positions);
+	  cc.strokeStyle="#FF0000";
+	  cc.strokeRect(myBox.x, myBox.y, myBox.width, myBox.height);
+	  //cc.stroke();
+	// Print the values
+	  console.log("x : " + myBox.x + "\ny : " + myBox.y + "\ncenter x : " 
+	  	+ myBox.center.x + "\ncenter y : " + myBox.center.y + "\nwidth : " + myBox.width + "\nheight : " + myBox.height);
+	}
+}
+
+  positionLoop();
+
+
+/* ------------------------------------------------------------------- */
+
+
+
 // Function to get the axis aligned bounding box (AABB)
 
-var aabb = function getAABB(positions) {
-      if (positions && positions.length > 0) {
-        let min = {x: Number.POSITIVE_INFINITY, y: Number.POSITIVE_INFINITY };
-        let max = {x: Number.NEGATIVE_INFINITY, y: Number.NEGATIVE_INFINITY };
-        for (let i = 0; i < positions.length; i++) {
-          let point = positions[i];
-          if (point[0] != 'M') {
-            let x = point[0];
-            let y = point[1];
-            if (x < min.x) min.x = x;
-            else if (x > max.x) max.x = x;
+function getAABB(points) {
+  if (points && points.length > 0) {
+    let min = {x: Number.POSITIVE_INFINITY, y: Number.POSITIVE_INFINITY };
+    let max = {x: Number.NEGATIVE_INFINITY, y: Number.NEGATIVE_INFINITY };
+    for (let i = 0; i < points.length; i++) {
+      let point = points[i];
+      let x = point[0];
+      let y = point[1];
+      if (x < min.x) min.x = x;
+      else if (x > max.x) max.x = x;
 
-            if (y < min.y) min.y = y;
-            else if (y > max.y) max.y = y;
-          }
-        }
-
-        let w = Math.abs(max.x - min.x);
-        let h = Math.abs(max.y - min.y);
-
-        return {
-          x: min.x,
-          y: min.y,
-          center: {x: min.x + w / 2, y: min.y + h / 2},
-          width: w,
-          height: h
-        };
-      } else return null;
+      if (y < min.y) min.y = y;
+      else if (y > max.y) max.y = y;
     }
+
+    let w = Math.abs(max.x - min.x);
+    let h = Math.abs(max.y - min.y);
+
+    return {
+      x: min.x,
+      y: min.y,
+      center: {x: min.x + w / 2, y: min.y + h / 2},
+      width: w,
+      height: h
+    };
+  } else return null;
+}
+
+
+/* ------------------------------------------------------------------- */
+
 
 
 /* --- STUFF I DON'T NEED RIGHT NOW BUT I LEFT IT HERE FOR THE MOMENT --- */
