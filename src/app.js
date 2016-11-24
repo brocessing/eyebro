@@ -5,6 +5,8 @@ console.log(`It's working !`)
 
 // We define our video input as the <video> tag (id = webcam)
 var webcam = document.getElementById('webcam');
+// var box = [boxX, boxY, boxWidth, boxHeight];
+
 
 
 /* ------------------------------------------------------------------- */
@@ -49,6 +51,14 @@ function drawLoop() {
   }
 
    drawLoop();
+
+
+// function animate(box) {
+// 	ctracker.start(document.getElementById('image'), box);
+// 	drawLoop();
+// }
+
+// 	animate();
    
 
 /* ------------------------------------------------------------------- */
@@ -67,9 +77,10 @@ function positionLoop() {
       var eyebrowLeftHeight = positions[19][1] + positions[20][1] + positions[21][1] + positions[22][1];
       var eyebrowLeftOK = eyebrowLeftHeight / 4;
       var eyebrowRightHeight = positions[18][1] + positions[17][1] + positions[16][1] + positions[15][1];
-      var eyebrowRightOK = eyebrowRightHeight / 4;      
-      /*console.log("eyebrow left height : " + eyebrowLeftOK + "\neyebrow right height : " + eyebrowRightOK
-        + "\nnose : = " + positions[33][1]);*/
+      var eyebrowRightOK = eyebrowRightHeight / 4;
+      var averageEyebro = (eyebrowLeftOK + eyebrowRightOK) / 2      
+      var nose = positions[33][1];
+  
 
 	// Callback if the tracking fit your face or not
 	  var ok = "Your face is successfuly tracked !";
@@ -85,11 +96,19 @@ function positionLoop() {
 	  var myBox = getAABB(positions);
 	  cc.strokeStyle="#FF0000";
 	  cc.strokeRect(myBox.x, myBox.y, myBox.width, myBox.height);
-	  //cc.stroke();
 	// Print the values
-	  console.log("x : " + myBox.x + "\ny : " + myBox.y + "\ncenter x : " 
-	  	+ myBox.center.x + "\ncenter y : " + myBox.center.y + "\nwidth : " + myBox.width + "\nheight : " + myBox.height);
-	}
+	// diff is the distance between eyebrows and nose in relation to the bounding box
+	  var diff = Math.abs((nose - averageEyebro) / myBox.height) * 100;
+      console.log("averageEyebro: " + averageEyebro + "\nnose: " + nose + "\ndiff: " + diff);
+	 	
+	 	if(diff > 13) {
+	 		cc.strokeStyle="#0023FF";
+	 		cc.lineWidth=5;
+	 		cc.strokeRect(myBox.x, myBox.y, myBox.width, myBox.height);
+	}   else {
+	 		cc.lineWidth=1;
+	 }
+  }
 }
 
   positionLoop();
