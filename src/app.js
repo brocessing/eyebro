@@ -5,8 +5,6 @@ console.log(`It's working !`)
 
 // We define our video input as the <video> tag (id = webcam)
 var webcam = document.getElementById('webcam');
-// var box = [boxX, boxY, boxWidth, boxHeight];
-
 
 
 /* ------------------------------------------------------------------- */
@@ -50,15 +48,7 @@ function drawLoop() {
     ctracker.draw(canvasInput);
   }
 
-   drawLoop();
-
-
-// function animate(box) {
-// 	ctracker.start(document.getElementById('image'), box);
-// 	drawLoop();
-// }
-
-// 	animate();
+drawLoop();
    
 
 /* ------------------------------------------------------------------- */
@@ -68,11 +58,7 @@ function positionLoop() {
 	requestAnimationFrame(positionLoop);
 	var positions = ctracker.getCurrentPosition();
 // Put "positions" in an if statement (otherwise positions return null) 
-      if (positions) {
-
-    //     for (var p = 15; p <= 18; p++) {
-    //     console.log("positions x = " + positions[p][0] + "\nposition y = " + positions[p][1]); 
-    // }
+    if (positions) {
 
       var eyebrowLeftHeight = positions[19][1] + positions[20][1] + positions[21][1] + positions[22][1];
       var eyebrowLeftOK = eyebrowLeftHeight / 4;
@@ -101,13 +87,13 @@ function positionLoop() {
 	  var diff = Math.abs((nose - averageEyebro) / myBox.height) * 100;
       console.log("averageEyebro: " + averageEyebro + "\nnose: " + nose + "\ndiff: " + diff);
 	 	
-	 	if(diff > 13) {
-	 		cc.strokeStyle="#0023FF";
-	 		cc.lineWidth=5;
-	 		cc.strokeRect(myBox.x, myBox.y, myBox.width, myBox.height);
-	}   else {
-	 		cc.lineWidth=1;
-	 }
+	if(diff > 13) {
+	  cc.strokeStyle="#0023FF";
+	  cc.lineWidth=5;
+	  cc.strokeRect(myBox.x, myBox.y, myBox.width, myBox.height);
+	} else {
+	 	cc.lineWidth=1;
+	}
   }
 }
 
