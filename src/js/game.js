@@ -1,0 +1,209 @@
+var Perlin = require('perlin').noise;
+var M = require('./math')();
+var Ball = require('./ball');
+
+function Game() {
+  var opts = {
+    debug        : true,
+    godmode      : true,
+    autoSpeed    : true,
+
+    tileSize     : 100,
+    jumpSpeed    : 15,
+    initialSpeed : 5.0,
+    maxSpeed     : 10.0,
+    acceleration : 0.01,
+
+    y            : 500,
+    width        : 9999999,
+    weight       : 10,
+    bounce: {
+      height        : 150,
+      width         : 200,
+      detail        : 0.1,
+    },
+
+    colors: {
+      platform      : '#80DEEA',
+      ball          : '#000',
+    },
+
+    ball: {
+      x             : 200,
+      trailLength   : 3,
+      radius        : 25,
+      gravity       : 9.81,
+      bounce        : 0.5,
+      jumpMax       : 50,
+      aerial        : 0.35,
+      stretch       : 0.8,
+    },
+  };
+
+  var distance = 0, speed = opts.initialSpeed;
+  var ball = Ball(opts.ball);
+
+  // -------------------------------------------------------------------------
+
+  var tiles = (function() {
+    var tiles = [];
+    var next = Math.floor(window.innerWidth * 0.5 / opts.tileSize);
+
+    for (var i = 0; i < opts.width; i += opts.tileSize) {
+      if (next > 0) {
+        tiles.push(true);
+        next--;
+      } else if (next < 0) {
+        tiles.push(false);
+        next++;
+      } else {
+        tiles.push(true);
+        next = Math.floor(Math.random() * 7) - 2;
+      }
+
+      // tiles.push(true);
+    }
+
+    return tiles;
+  })();
+
+  var relief = (function() {
+    var values = [];
+    var xoff = 0;
+    for (var i = 0; i < tiles.length; i++) {
+      values.push(Perlin.perlin2(xoff, 0) * 100);
+      xoff += 0.2;
+    }
+    return values;
+  })();
+
+
+  // -------------------------------------------------------------------------
+
+  var api = {
+    running: false,
+    get distance() { return distance; },
+
+    start: function() { api.running = true; },
+    stop: function() { api.running = false; },
+    loose: function() {
+      api.stop();
+      console.warn('GAME OVER.');
+    },
+
+    jump: function(acc = 80) { ball.jump(acc); },
+
+    update: function(dt) {
+      if (api.running) {
+        // DEBUG
+        // distance = window.mouseX;
+        if (opts.autoSpeed) speed = Math.min(speed + opts.acceleration, opts.maxSpeed);
+        distance += speed;
+
+        var collide = (tiles[getCurrentTileIndex()] && touch(getCurrentTileIndex(), 3));
+        if (ball.y < -100) api.loose();
+      }
+
+      if (ball.y > -800) ball.update(dt, collide || opts.godmode);
+
+      return api;
+    },
+
+    render : function(canvas, ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // TERRAIN RENDERING
+      ctx.strokeStyle = opts.colors.platform;
+      ctx.lineWidth = opts.weight;
+      ctx.lineCap = 'round';
+
+      var trailMax = Number.POSITIVE_INFINITY;
+      var currentPlatform = getCurrentPlatform();
+
+      ctx.beginPath();
+      for (var i = 0, l = tiles.length; i < l; i++) {
+        var x = i * opts.tileSize - distance;
+        if (x > - opts.tileSize && x < canvas.width && tiles[i]) {
+          // UNDER THE BALL, MORE DETAILLED PLATFORMS
+          if (x > opts.ball.x - opts.bounce.width * 1.5 && x < opts.ball.x + opts.bounce.width) {
+
+            var dist = M.norm(M.maxDist(opts.ball.x, x, opts.bounce.width), 0, opts.bounce.width);
+            var stretch = -Math.min(ball.y, 0) * (i > currentPlatform.start && i <= currentPlatform.stop);
+            var bounce = (1 - dist) * stretch;
+
+            ctx.moveTo(x, opts.y + relief[i] + bounce);
+
+            for (var t = 0; t < 1; t += opts.bounce.detail) {
+              var lerp = {
+                x: M.lerp(x, x + opts.tileSize, t),
+                y: M.lerp(relief[i], relief[i + 1], t)
+              };
+
+              var dist = M.norm(M.maxDist(opts.ball.x, lerp.x, opts.bounce.width), 0, opts.bounce.width);
+              bounce = (1 - dist) * stretch;
+
+              ctx.lineTo(lerp.x, opts.y + bounce + lerp.y);
+              if (dist <= 0.01) trailMax = opts.y + bounce + lerp.y;
+            }
+            ctx.lineTo(x + opts.tileSize, opts.y + relief[i + 1] + bounce);
+          } else {
+            // ELSEWHERE, RIGID STANDARD PLATFORMS
+            ctx.moveTo(x, opts.y + relief[i]);
+            ctx.lineTo(x + opts.tileSize, opts.y + relief[i + 1]);
+          }
+        }
+      }
+
+      ctx.stroke();
+
+      // BALL RENDERING
+      ctx.strokeStyle = opts.colors.ball;
+      ctx.lineWidth = Math.floor(M.map(ball.dy, 0, 10, opts.ball.radius, opts.ball.radius * opts.ball.stretch));
+      ctx.beginPath();
+      var ballY = opts.y + getHeight(opts.ball.x + distance) - (opts.ball.radius / 2) - (opts.weight / 2) - ball.y;
+      var pballY = Math.min(trailMax, opts.y + getHeight(opts.ball.x + distance) - ball.trail)  - (opts.ball.radius / 2) - (opts.weight / 2);
+      ctx.moveTo(opts.ball.x, ballY);
+      ctx.lineTo(opts.ball.x - M.map(ball.dy, 0, 10, 0, 5), pballY);
+      ctx.stroke();
+    },
+  };
+
+  function getTileIndex(x) { return Math.floor(x / opts.tileSize); }
+  function getHeight(x) {
+    var index = getTileIndex(x);
+    var t = (x % opts.tileSize) / opts.tileSize;
+    return M.lerp(relief[index], relief[index + 1], t);
+  }
+
+  function getCurrentTileIndex() { return Math.floor((opts.ball.x + distance) / opts.tileSize); }
+
+  function getCurrentPlatform() {
+    var platform = { start : Number.NEGATIVE_INFINITY, stop: Number.POSITIVE_INFINITY };
+    // FIND THE NEAREST HOLE ON THE LEFT
+    for (var i = getCurrentTileIndex(); i > getCurrentTileIndex() - 3; i--) {
+      if (!tiles[i]) {
+        platform.start = i;
+        break;
+      }
+    }
+    // FIND THE NEAREST HOLE ON THE RIGHT
+    for (var i = getCurrentTileIndex(); i < getCurrentTileIndex() + 3; i++) {
+      if (!tiles[i]) {
+        platform.stop = i;
+        break;
+      }
+    }
+    return platform;
+  }
+
+  function touch(tileIndex, threshold) {
+    var
+      t = opts.ball.radius * threshold,
+      ballX = opts.ball.x + distance,
+      x = tileIndex * opts.tileSize;
+    return (ballX > x - t && ballX < x + opts.tileSize + t);
+  }
+
+  return api;
+}
+
+module.exports = Game;

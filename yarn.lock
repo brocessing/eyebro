@@ -2596,6 +2596,10 @@ pbkdf2-compat@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/pbkdf2-compat/-/pbkdf2-compat-2.0.1.tgz#b6e0c8fa99494d94e0511575802a59a5c142f288"
 
+perlin:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/perlin/-/perlin-1.0.0.tgz#3e53ebf5d6555a277c4586772338386782d9f52b"
+
 pify@^2.0.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
@@ -2885,6 +2889,11 @@ postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0
     js-base64 "^2.1.9"
     source-map "^0.5.6"
     supports-color "^3.1.2"
+
+pqml/raf:
+  name raf
+  version "0.0.8"
+  resolved "https://codeload.github.com/pqml/raf/tar.gz/b3d23c047c90e9eac184e10ade4050d367e29c9e"
 
 prepend-http@^1.0.0:
   version "1.0.4"

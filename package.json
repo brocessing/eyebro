@@ -45,5 +45,8 @@
     "webpack-hot-middleware": "^2.13.0",
     "webpack-merge": "^0.14.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "perlin": "^1.0.0",
+    "raf": "pqml/raf"
+  }
 }
