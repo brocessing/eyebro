@@ -88,6 +88,7 @@ function Game(_opts) {
   var api = {
     running: false,
     get distance() { return distance; },
+    get score() { return distance.toFixed(0); },
 
     on: function(event, cb) {
       emitter.on(event, cb);
