@@ -27,7 +27,8 @@ function Tracker(opts) {
 
     // improve tracking
     // see http://www.auduno.com/clmtrackr/docs/reference.html#responses
-    ctracker.setResponseMode('single', ['sobel', 'lbp']);
+    // ctracker.setResponseMode('single', ['sobel', 'lbp']);
+    ctracker.setResponseMode('single', ['raw']);
   }
 
 

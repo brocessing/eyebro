@@ -17,9 +17,6 @@ function Ball(opts) {
     },
 
     update: function(dt, floor = false) {
-      // DEBUG
-      dt = 16;
-
       py = y;
       velocity -= opts.gravity * (dt/1000) * 30;
       y += velocity * (dt/1000) * 30;

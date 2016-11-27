@@ -32,6 +32,8 @@ window.document.addEventListener('keypress', function(e) {
 });
 
 raf.add(function (dt) {
+  dt = Math.min(dt, 30);
+
   tracker.update();
 
   if (tracker.diff > 13) game.jump();
