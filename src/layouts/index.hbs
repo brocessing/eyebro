@@ -11,9 +11,14 @@
 
 <body>
   <main>
-    <video id="webcam" width="640" height="480" autoplay="true"></video>
-    <canvas id="faces"></canvas>
-    <canvas id="game"></canvas>
+    <div class="screen" id="welcomeScreen"></div>
+    <div class="screen" id="gameScreen">
+      <video id="webcam" width="320" height="240" autoplay="true"></video>
+      <canvas id="faces"></canvas>
+      <canvas id="game"></canvas>
+      <canvas id="debug"></canvas>
+      <div id="debug"></div>
+    </div>
   </main>
 
   <script src="clmtrackr.js"></script>

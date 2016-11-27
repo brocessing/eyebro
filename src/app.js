@@ -1,20 +1,31 @@
 var raf = require('raf');
-var Tracker = require('./js/tracker');
+var Face = require('./js/face');
 var Game = require('./js/game');
 
-var tracker = Tracker({
-  webcam: window.document.getElementById('webcam'),
+var face = Face({
+  src: window.document.getElementById('webcam'),
+  color: '#F48FB1',
+  lineWidth: 10,
+  mirror: true,
+  samplingLength: 100,
 });
 
 
-var game = Game();
+// var game = Game();
 
-var cGame = window.document.getElementById('game');
-    cGame.width = window.innerWidth;
-    cGame.height = window.innerHeight;
-    cGame.style.width = cGame.width + 'px';
-    cGame.style.height = cGame.height + 'px';
-var ctxGame = cGame.getContext('2d');
+var cDebug = window.document.getElementById('debug');
+    cDebug.width = face.src.width;
+    cDebug.height = face.src.height;
+    cDebug.style.width = cDebug.width;
+    cDebug.style.height = cDebug.height;
+var ctxDebug = cDebug.getContext('2d');
+
+// var cGame = window.document.getElementById('game');
+//     cGame.width = window.innerWidth;
+//     cGame.height = window.innerHeight;
+//     cGame.style.width = cGame.width + 'px';
+//     cGame.style.height = cGame.height + 'px';
+// var ctxGame = cGame.getContext('2d');
 
 var cFace = window.document.getElementById('faces');
     cFace.width = window.innerWidth;
@@ -24,23 +35,27 @@ var cFace = window.document.getElementById('faces');
 var ctxFace = cFace.getContext('2d');
 
 
-window.document.addEventListener('keypress', function(e) {
-  if (e.key === ' ') {
-    game.jump();
-    e.preventDefault();
-  }
-});
+// window.document.addEventListener('keypress', function(e) {
+//   if (e.key === ' ') {
+//     game.jump();
+//     e.preventDefault();
+//   }
+// });
 
 raf.add(function (dt) {
   dt = Math.min(dt, 30);
 
-  tracker.update();
+  face.update();
 
-  if (tracker.diff > 13) game.jump();
-  game.update(dt);
+  face.tracker.render(cDebug, ctxDebug);
 
-  tracker.render(cFace, ctxFace);
-  game.render(cGame, ctxGame);
+  console.log(face.eyebrows.ny);
+
+  // if (tracker.diff > 13) game.jump();
+  // game.update(dt);
+
+  face.render(cFace, ctxFace);
+  // game.render(cGame, ctxGame);
 });
 
-game.start();
+// game.start();
