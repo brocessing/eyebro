@@ -10,15 +10,28 @@
 </head>
 
 <body>
-  <main>
-    <div class="screen" id="welcomeScreen"></div>
-    <div class="screen" id="gameScreen">
+
+    <div class="debug">
       <video id="webcam" width="640" height="480" autoplay="true"></video>
-      <canvas id="faces"></canvas>
-      <canvas id="game"></canvas>
       <canvas id="tracker"></canvas>
       <div id="debug"></div>
     </div>
+
+  <main>
+
+    <canvas id="faces"></canvas>
+
+    <div class="screen show" id="welcomeScreen">
+      <div class="wrapper">
+        <h1>eyebro</h1>
+        <button id="startBtn">start</button>
+      </div>
+    </div>
+
+    <div class="screen" id="gameScreen">
+      <canvas id="game"></canvas>
+    </div>
+
   </main>
 
   <script src="clmtrackr.js"></script>

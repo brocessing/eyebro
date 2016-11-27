@@ -1,14 +1,53 @@
+red = #FFA5A5
+yellow = #FFFFC2
+green = #C8E7ED
+blue = #BFCFFF
+
 body
-  background #FFF59D
+  background yellow
+
+.debug
+    display none
+  video#webcam
+    position absolute
+  #debug
+    position absolute
 
 
-video#webcam
-  position absolute
-  opacity 0.5
-  // display none
 
-canvas
-  position absolute
+.screen {
+  opacity 0
+  &.show {
+    z-index 2
+    opacity 1
+  }
 
-#debug
-  position absolute
+  position fixed
+  top 0
+  left 0
+  right 0
+  bottom 0
+  text-align center
+
+  .wrapper {
+    position absolute
+    top 10%
+    left 10%
+    width 80%
+    height 80%
+
+    border 10px solid blue
+
+    h1 {
+      margin 0
+      font-size 10vw
+      font-family roboto
+      text-transform uppercase
+      color blue
+    }
+
+    button#start {
+
+    }
+  }
+}

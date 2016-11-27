@@ -1,6 +1,7 @@
-var Perlin = require('perlin').noise;
-var M = require('./math')();
-var Ball = require('./ball');
+var Perlin      = require('perlin').noise;
+var M           = require('./math')();
+var Ball        = require('./ball');
+var TinyEmitter = require('tiny-emitter');
 
 function Game(_opts) {
   var opts = Object.assign({
@@ -26,7 +27,7 @@ function Game(_opts) {
     },
 
     colors: {
-      platform      : '#80DEEA',
+      platform      : '#BFCFFF',
       ball          : '#000',
     },
 
@@ -42,6 +43,7 @@ function Game(_opts) {
     },
   }, _opts);
 
+  var emitter = new TinyEmitter();
   var ctx = opts.canvas.getContext('2d');
 
   var distance = 0, speed = opts.initialSpeed;
@@ -88,11 +90,19 @@ function Game(_opts) {
     running: false,
     get distance() { return distance; },
 
-    start: function() { api.running = true; },
+    on: function(event, cb) {
+      emitter.on(event, cb);
+    },
+
+    start: function() {
+      api.running = true;
+      ball.y = 0;
+      emitter.emit('start');
+    },
     stop: function() { api.running = false; },
-    loose: function() {
-      api.stop();
+    loose: function(cb) {
       console.warn('GAME OVER.');
+      cb(api.distance);
     },
 
     jump: function(acc = 80) { ball.jump(acc); },
@@ -105,10 +115,11 @@ function Game(_opts) {
         distance += speed;
 
         var collide = (tiles[getCurrentTileIndex()] && touch(getCurrentTileIndex(), 3));
-        if (ball.y < -100) api.loose();
-      }
+        ball.update(dt, collide || opts.godmode);
 
-      if (ball.y > -800) ball.update(dt, collide || opts.godmode);
+        if (ball.y < -100) api.loose();
+        if (ball.y < -800) api.stop();
+      }
 
       return api;
     },

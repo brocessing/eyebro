@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "perlin": "^1.0.0",
-    "raf": "pqml/raf"
+    "raf": "pqml/raf",
+    "tiny-emitter": "^1.1.0"
   }
 }

@@ -12,7 +12,7 @@ var cFace = window.document.getElementById('faces');
 var face = Face({
   canvas: cFace,
   src: window.document.getElementById('webcam'),
-  color: '#F48FB1',
+  color: '#FFA5A5',
   lineWidth: 10,
   mirror: true,
   samplingLength: 100,
@@ -48,6 +48,20 @@ window.document.addEventListener('keypress', function(e) {
   }
 });
 
+var start = window.document.getElementById('startBtn');
+start.addEventListener('click', function() {
+  var gameScreen = window.document.getElementById('gameScreen');
+  gameScreen.classList.add('show');
+
+  var splashScreen = window.document.getElementById('welcomeScreen');
+  splashScreen.classList.remove('show');
+  game.start();
+});
+
+var start
+function loose(score) {
+}
+
 var debug = window.document.getElementById('debug');
 
 raf.add(function (dt) {
@@ -68,5 +82,3 @@ raf.add(function (dt) {
   game.render();
 
 });
-
-game.start();
