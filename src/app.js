@@ -47,23 +47,21 @@ window.document.addEventListener('keypress', function(e) {
 });
 
 raf.add(function (dt) {
-  // dt = Math.min(dt, 30);
+  dt = Math.min(dt, 30);
 
   face.update();
-
   face.tracker.render(cDebug, ctxDebug);
 
   if (face.calibrated) {
     if (face.eyebrows.ny > 0.5) game.jump();
-
     console.log(face.eyebrows.ny);
     game.update(dt);
-
-    face.render();
-    game.render();
   } else {
     console.log('calibrating...');
   }
+
+  face.render();
+  game.render();
 
 });
 
