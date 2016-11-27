@@ -15,7 +15,7 @@ function Tracker(opts) {
     // see http://www.auduno.com/clmtrackr/docs/reference.html#parameters
     var ctracker = new clm.tracker({
       constantVelocity  : true,
-      searchWindow      : 11,
+      searchWindow      : 20,
       useWebGL          : true,
       scoreThreshold    : scoreThreshold,
       stopOnConvergence : false,

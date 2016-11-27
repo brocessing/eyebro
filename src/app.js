@@ -57,7 +57,7 @@ raf.add(function (dt) {
   face.tracker.render(cDebug, ctxDebug);
 
   if (face.calibrated) {
-    if (face.eyebrows.ny > 0.5) game.jump();
+    if (face.eyebrows.ny > 0.75) game.jump();
     debug.innerHTML = face.eyebrows.ny.toFixed(2);
   } else {
     debug.innerHTML = 'calibrating...';
