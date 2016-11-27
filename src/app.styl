@@ -3,8 +3,35 @@ yellow = #FFFFC2
 green = #C8E7ED
 blue = #BFCFFF
 
+@import url('https://fonts.googleapis.com/css?family=Roboto:900i');
+
+easing(duration) {
+  -webkit-transition: all (duration)ms cubic-bezier(0.250, 0.100, 0.250, 1.000);
+  -moz-transition: all (duration)ms cubic-bezier(0.250, 0.100, 0.250, 1.000);
+  -ms-transition: all (duration)ms cubic-bezier(0.250, 0.100, 0.250, 1.000);
+  -o-transition: all (duration)ms cubic-bezier(0.250, 0.100, 0.250, 1.000);
+  transition: all (duration)ms cubic-bezier(0.250, 0.100, 0.250, 1.000);
+}
+
+::-moz-selection {
+  color yellow
+  fill yellow
+  background red
+
+}
+::selection {
+  color yellow
+  fill yellow
+  background red
+}
+
+// -------------------------------------------------------------------------
+
 body
+  margin 0
   background yellow
+  font-family 'Roboto', sans-serif
+  color red
 
 .debug
     display none
@@ -12,7 +39,6 @@ body
     position absolute
   #debug
     position absolute
-
 
 
 .screen {
@@ -29,25 +55,62 @@ body
   bottom 0
   text-align center
 
+  .logo {
+    position fixed
+    top 2vw
+    left 2vw
+    width 10vw
+  }
+
+  .score {
+    position fixed
+    top 2vw
+    right 2vw
+    text-align right
+  }
+
+
   .wrapper {
     position absolute
-    top 10%
-    left 10%
-    width 80%
-    height 80%
-
-    border 10px solid blue
+    top 50%
+    left 50%
+    width 100%
+    transform translateX(-50%) translateY(-50%)
 
     h1 {
-      margin 0
-      font-size 10vw
-      font-family roboto
-      text-transform uppercase
-      color blue
+      easing(300)
+      font-family 'Roboto', sans-serif
+      font-style italic
+      // text-transform uppercase
+      width 70%
+      margin 0 auto
+      color red
     }
 
-    button#start {
+    h2 {
+      easing(300)
+      margin 0
+      letter-spacing 0.125em
+    }
 
+    button {
+      easing(300)
+      display inline-block
+      margin-top 10vw
+      margin-right 2vw
+      padding 1vw
+      padding-bottom 1.5vw
+      position relative
+      background none
+      outline none
+      font-family 'Roboto', sans-serif
+      color blue
+      font-size 5vw
+      border 10px solid transparent
+      cursor pointer
+      &:hover {
+        border-color red
+      }
     }
   }
 }

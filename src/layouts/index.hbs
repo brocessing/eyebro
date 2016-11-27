@@ -11,11 +11,11 @@
 
 <body>
 
-    <div class="debug">
-      <video id="webcam" width="640" height="480" autoplay="true"></video>
-      <canvas id="tracker"></canvas>
-      <div id="debug"></div>
-    </div>
+  <div class="debug">
+    <video id="webcam" width="640" height="480" autoplay="true"></video>
+    <canvas id="tracker"></canvas>
+    <div id="debug"></div>
+  </div>
 
   <main>
 
@@ -23,13 +23,45 @@
 
     <div class="screen show" id="welcomeScreen">
       <div class="wrapper">
-        <h1>eyebro</h1>
-        <button id="startBtn">start</button>
+        <h1>
+          <?xml version="1.0" encoding="UTF-8"?>
+          <svg viewBox="0 0 145 48">
+            <g id="eyebro-logo-2" sketch:type="MSLayerGroup" transform="translate(0.000000, -13.000000)">
+              <text id="eyebro-copy-4" sketch:type="MSTextLayer" font-family="Roboto" font-size="48" font-style="italic" font-weight="686" fill="#FFA5A5">
+                <tspan x="0" y="50">eyebro</tspan>
+              </text>
+              <path class="eyebrows" d="M10,16 C10,16 14.4198834,20.5 19.5586093,16" stroke="#FFA5A5" stroke-width="5" stroke-linecap="round" transform="translate(14.779305, 17.000000) rotate(-180.000000) translate(-14.779305, -17.000000) "></path>
+              <path class="eyebrows" d="M61,16 C61,16 65.4198834,20.5 70.5586093,16" stroke="#FFA5A5" stroke-width="5" stroke-linecap="round" transform="translate(65.779305, 17.000000) rotate(-180.000000) translate(-65.779305, -17.000000) "></path>
+          </svg>
+        </h1>
+        <h2>a game where your face is the controller</h2>
+        <button id="startBtn">1 player</button> <button id="startBtn">2 players</button>
+        <!-- <a href="#">how to play</a> -->
       </div>
     </div>
 
     <div class="screen" id="gameScreen">
+      <div class="logo">
+        <?xml version="1.0" encoding="UTF-8"?>
+        <svg viewBox="0 0 145 48">
+          <g id="eyebro-logo-2" sketch:type="MSLayerGroup" transform="translate(0.000000, -13.000000)">
+            <text id="eyebro-copy-4" sketch:type="MSTextLayer" font-family="Roboto" font-size="48" font-style="italic" font-weight="686" fill="#FFA5A5">
+              <tspan x="0" y="50">eyebro</tspan>
+            </text>
+            <path class="eyebrows" d="M10,16 C10,16 14.4198834,20.5 19.5586093,16" stroke="#FFA5A5" stroke-width="5" stroke-linecap="round" transform="translate(14.779305, 17.000000) rotate(-180.000000) translate(-14.779305, -17.000000) "></path>
+            <path class="eyebrows" d="M61,16 C61,16 65.4198834,20.5 70.5586093,16" stroke="#FFA5A5" stroke-width="5" stroke-linecap="round" transform="translate(65.779305, 17.000000) rotate(-180.000000) translate(-65.779305, -17.000000) "></path>
+        </svg>
+      </div>
+      <div class="score" id="score"></div>
       <canvas id="game"></canvas>
+    </div>
+
+    <div class="screen" id="endScreen">
+      <div class="wrapper">
+        <h1>you loose</h1>
+        <h2 id="finalScore"></h2>
+        <button>twitter</button>
+      </div>
     </div>
 
   </main>

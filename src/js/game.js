@@ -7,8 +7,7 @@ function Game(_opts) {
   var opts = Object.assign({
     canvas       : null,
 
-    debug        : true,
-    godmode      : true,
+    godmode      : false,
     autoSpeed    : true,
 
     tileSize     : 100,
@@ -28,7 +27,7 @@ function Game(_opts) {
 
     colors: {
       platform      : '#BFCFFF',
-      ball          : '#000',
+      ball          : '#FFA5A5',
     },
 
     ball: {
@@ -99,26 +98,31 @@ function Game(_opts) {
       ball.y = 0;
       emitter.emit('start');
     },
-    stop: function() { api.running = false; },
+
+    stop: function() {
+      api.running = false;
+      emitter.emit('stop');
+    },
+
     loose: function(cb) {
       console.warn('GAME OVER.');
-      cb(api.distance);
+      emitter.emit('loose');
     },
 
     jump: function(acc = 80) { ball.jump(acc); },
 
     update: function(dt) {
       if (api.running) {
-        // DEBUG
-        // distance = window.mouseX;
         if (opts.autoSpeed) speed = Math.min(speed + opts.acceleration, opts.maxSpeed);
         distance += speed;
 
-        var collide = (tiles[getCurrentTileIndex()] && touch(getCurrentTileIndex(), 3));
+        var collide = ball.y > -100 && (tiles[getCurrentTileIndex()] && touch(getCurrentTileIndex(), 3));
         ball.update(dt, collide || opts.godmode);
 
-        if (ball.y < -100) api.loose();
-        if (ball.y < -800) api.stop();
+        if (ball.y < -600) {
+          api.stop();
+          api.loose();
+        }
       }
 
       return api;

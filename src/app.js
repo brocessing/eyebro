@@ -12,7 +12,7 @@ var cFace = window.document.getElementById('faces');
 var face = Face({
   canvas: cFace,
   src: window.document.getElementById('webcam'),
-  color: '#FFA5A5',
+  color: '#C8E7ED',
   lineWidth: 10,
   mirror: true,
   samplingLength: 100,
@@ -48,21 +48,24 @@ window.document.addEventListener('keypress', function(e) {
   }
 });
 
+var splashScreen = window.document.getElementById('welcomeScreen');
+var gameScreen = window.document.getElementById('gameScreen');
+var endScreen = window.document.getElementById('endScreen');
 var start = window.document.getElementById('startBtn');
 start.addEventListener('click', function() {
-  var gameScreen = window.document.getElementById('gameScreen');
   gameScreen.classList.add('show');
 
-  var splashScreen = window.document.getElementById('welcomeScreen');
   splashScreen.classList.remove('show');
   game.start();
 });
 
-var start
-function loose(score) {
-}
+game.on('loose', function() {
+  gameScreen.classList.remove('show');
+  window.document.getElementById('finalScore').innerHTML = game.distance.toFixed(0);
+  endScreen.classList.add('show');
+})
 
-var debug = window.document.getElementById('debug');
+var score = window.document.getElementById('score');
 
 raf.add(function (dt) {
   dt = Math.min(dt, 50);
@@ -72,13 +75,15 @@ raf.add(function (dt) {
 
   if (face.calibrated) {
     if (face.eyebrows.ny > 0.75) game.jump();
-    debug.innerHTML = face.eyebrows.ny.toFixed(2);
+    // debug.innerHTML = face.eyebrows.ny.toFixed(2);
   } else {
-    debug.innerHTML = 'calibrating...';
+    // debug.innerHTML = 'calibrating...';
   }
-  face.render();
 
+  face.render();
   game.update(dt);
   game.render();
+
+  score.innerHTML = game.distance.toFixed(0);
 
 });

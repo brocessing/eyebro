@@ -85,6 +85,8 @@ function Face(opts) {
       ctx.strokeStyle = opts.color;
       ctx.fillStyle = opts.color;
       ctx.lineWidth = opts.lineWidth;
+      ctx.lineCap = 'round';
+
       if (tracker.points) {
         var src = {
           x: opts.mirror ? opts.src.width : 0,
@@ -96,10 +98,14 @@ function Face(opts) {
         // draw face
         ctx.beginPath();
         drawPath(ctx, paths.jaw, src, opts.canvas);
-        drawPath(ctx, paths.eyebrows.left, src, opts.canvas);
-        drawPath(ctx, paths.eyebrows.right, src, opts.canvas);
         drawPath(ctx, paths.nose.bottom, src, opts.canvas);
         drawPath(ctx, paths.mouth, src, opts.canvas);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.strokeStyle = '#FFA5A5';
+        drawPath(ctx, paths.eyebrows.left, src, opts.canvas);
+        drawPath(ctx, paths.eyebrows.right, src, opts.canvas);
         ctx.stroke();
 
         // draw eyes
@@ -111,8 +117,10 @@ function Face(opts) {
           MathUtils.map(tracker.points[paths.eyes.pupils.right][0], src.x, src.w, 0, opts.canvas.width),
           MathUtils.map(tracker.points[paths.eyes.pupils.right][1], src.y, src.h, 0, opts.canvas.height)
         ];
-        ctx.fillRect(leftEye[0], leftEye[1], 10, 10);
-        ctx.fillRect(rightEye[0], rightEye[1], 10, 10);
+        ctx.beginPath();
+        ctx.arc(leftEye[0], leftEye[1], 8, 0, 2 * Math.PI, false);
+        ctx.arc(rightEye[0], rightEye[1], 8, 0, 2 * Math.PI, false);
+        ctx.fill();
       }
     },
   };
