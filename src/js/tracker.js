@@ -9,13 +9,15 @@ function Tracker(opts) {
       opts.webcam.src = window.URL.createObjectURL(stream);
     }
 
+    var scoreThreshold = 0.4;
+
     // Define a new clemtracker object
     // see http://www.auduno.com/clmtrackr/docs/reference.html#parameters
     var ctracker = new clm.tracker({
       constantVelocity  : true,
       searchWindow      : 30,
       useWebGL          : true,
-      scoreThreshold    : 0.3,
+      scoreThreshold    : scoreThreshold,
       stopOnConvergence : false,
     });
 
@@ -31,6 +33,10 @@ function Tracker(opts) {
   var api = {
     aabb: null,
     points: [],
+
+    isTracking: function() {
+      return ctracker.getScore() > scoreThreshold;
+    },
 
     update: function() {
       ctracker.track(opts.webcam);

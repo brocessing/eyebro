@@ -2,8 +2,10 @@ var Perlin = require('perlin').noise;
 var M = require('./math')();
 var Ball = require('./ball');
 
-function Game() {
-  var opts = {
+function Game(_opts) {
+  var opts = Object.assign({
+    canvas       : null,
+
     debug        : true,
     godmode      : true,
     autoSpeed    : true,
@@ -38,7 +40,9 @@ function Game() {
       aerial        : 0.35,
       stretch       : 0.8,
     },
-  };
+  }, _opts);
+
+  var ctx = opts.canvas.getContext('2d');
 
   var distance = 0, speed = opts.initialSpeed;
   var ball = Ball(opts.ball);
@@ -109,8 +113,8 @@ function Game() {
       return api;
     },
 
-    render : function(canvas, ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    render : function() {
+      ctx.clearRect(0, 0, opts.canvas.width, opts.canvas.height);
       // TERRAIN RENDERING
       ctx.strokeStyle = opts.colors.platform;
       ctx.lineWidth = opts.weight;
@@ -122,7 +126,7 @@ function Game() {
       ctx.beginPath();
       for (var i = 0, l = tiles.length; i < l; i++) {
         var x = i * opts.tileSize - distance;
-        if (x > - opts.tileSize && x < canvas.width && tiles[i]) {
+        if (x > - opts.tileSize && x < opts.canvas.width && tiles[i]) {
           // UNDER THE BALL, MORE DETAILLED PLATFORMS
           if (x > opts.ball.x - opts.bounce.width * 1.5 && x < opts.ball.x + opts.bounce.width) {
 

@@ -3,7 +3,6 @@ var MathUtils = require('./math.js')();
 
 function Face(opts) {
   var tracker = Tracker({ webcam: opts.src });
-
   // see http://www.auduno.com/clmtrackr/docs/media/facemodel_numbering_new.png
   var paths = {
     // jaw: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
@@ -28,6 +27,8 @@ function Face(opts) {
     mouth: [44, 56, 57, 58, 50],
   };
 
+  var ctx = opts.canvas.getContext('2d');
+
   var api = {
     calibrated: false,
     eyebrows: {
@@ -45,7 +46,7 @@ function Face(opts) {
     // update eyebrows position values
     update: function() {
       tracker.update();
-      if (tracker.points) {
+      if (tracker.isTracking() && tracker.points) {
         // eyebrows Y calculation
         var eyebrowLeftY  = (tracker.points[19][1] + tracker.points[20][1] + tracker.points[21][1] + tracker.points[22][1]) / 4;
         var eyebrowRightY = (tracker.points[18][1] + tracker.points[17][1] + tracker.points[16][1] + tracker.points[15][1]) / 4;
@@ -74,10 +75,13 @@ function Face(opts) {
       }
     },
 
-    recalibrate: function() { api.calibrated = false; },
+    recalibrate: function() {
+      api.eyebrows.samples = [];
+      api.calibrated = false;
+    },
 
-    render: function(canvas, ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    render: function() {
+      ctx.clearRect(0, 0, opts.canvas.width, opts.canvas.height);
       ctx.strokeStyle = opts.color;
       ctx.fillStyle = opts.color;
       ctx.lineWidth = opts.lineWidth;
@@ -91,21 +95,21 @@ function Face(opts) {
 
         // draw face
         ctx.beginPath();
-        drawPath(ctx, paths.jaw, src, canvas);
-        drawPath(ctx, paths.eyebrows.left, src, canvas);
-        drawPath(ctx, paths.eyebrows.right, src, canvas);
-        drawPath(ctx, paths.nose.bottom, src, canvas);
-        drawPath(ctx, paths.mouth, src, canvas);
+        drawPath(ctx, paths.jaw, src, opts.canvas);
+        drawPath(ctx, paths.eyebrows.left, src, opts.canvas);
+        drawPath(ctx, paths.eyebrows.right, src, opts.canvas);
+        drawPath(ctx, paths.nose.bottom, src, opts.canvas);
+        drawPath(ctx, paths.mouth, src, opts.canvas);
         ctx.stroke();
 
         // draw eyes
         var leftEye = [
-          MathUtils.map(tracker.points[paths.eyes.pupils.left][0], src.x, src.w, 0, canvas.width),
-          MathUtils.map(tracker.points[paths.eyes.pupils.left][1], src.y, src.h, 0, canvas.height)
+          MathUtils.map(tracker.points[paths.eyes.pupils.left][0], src.x, src.w, 0, opts.canvas.width),
+          MathUtils.map(tracker.points[paths.eyes.pupils.left][1], src.y, src.h, 0, opts.canvas.height)
         ];
         var rightEye = [
-          MathUtils.map(tracker.points[paths.eyes.pupils.right][0], src.x, src.w, 0, canvas.width),
-          MathUtils.map(tracker.points[paths.eyes.pupils.right][1], src.y, src.h, 0, canvas.height)
+          MathUtils.map(tracker.points[paths.eyes.pupils.right][0], src.x, src.w, 0, opts.canvas.width),
+          MathUtils.map(tracker.points[paths.eyes.pupils.right][1], src.y, src.h, 0, opts.canvas.height)
         ];
         ctx.fillRect(leftEye[0], leftEye[1], 10, 10);
         ctx.fillRect(rightEye[0], rightEye[1], 10, 10);
