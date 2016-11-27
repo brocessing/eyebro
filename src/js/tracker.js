@@ -9,13 +9,13 @@ function Tracker(opts) {
       opts.webcam.src = window.URL.createObjectURL(stream);
     }
 
-    var scoreThreshold = 0.4;
+    var scoreThreshold = 0.3;
 
     // Define a new clemtracker object
     // see http://www.auduno.com/clmtrackr/docs/reference.html#parameters
     var ctracker = new clm.tracker({
       constantVelocity  : true,
-      searchWindow      : 30,
+      searchWindow      : 11,
       useWebGL          : true,
       scoreThreshold    : scoreThreshold,
       stopOnConvergence : false,
@@ -25,8 +25,8 @@ function Tracker(opts) {
 
     // improve tracking
     // see http://www.auduno.com/clmtrackr/docs/reference.html#responses
-    ctracker.setResponseMode('blend', ['sobel', 'lbp']);
-    // ctracker.setResponseMode('single', ['raw']);
+    // ctracker.setResponseMode('blend', ['sobel', 'lbp']);
+    ctracker.setResponseMode('single', ['raw']);
   }
 
 

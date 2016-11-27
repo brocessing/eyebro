@@ -19,7 +19,7 @@ var face = Face({
 });
 
 // debug faceTracking
-var cDebug = window.document.getElementById('debug');
+var cDebug = window.document.getElementById('tracker');
     cDebug.width = face.src.width;
     cDebug.height = face.src.height;
     cDebug.style.width = cDebug.width;
@@ -40,27 +40,31 @@ var game = Game({
 
 window.document.addEventListener('keypress', function(e) {
   if (e.key === ' ') {
-    // game.jump();
-    face.recalibrate();
+    game.jump();
     e.preventDefault();
+  } else if (e.key === 'r') {
+    face.recalibrate();
+    e.preventDefault;
   }
 });
 
+var debug = window.document.getElementById('debug');
+
 raf.add(function (dt) {
-  dt = Math.min(dt, 30);
+  dt = Math.min(dt, 50);
 
   face.update();
   face.tracker.render(cDebug, ctxDebug);
 
   if (face.calibrated) {
     if (face.eyebrows.ny > 0.5) game.jump();
-    console.log(face.eyebrows.ny);
-    game.update(dt);
+    debug.innerHTML = face.eyebrows.ny.toFixed(2);
   } else {
-    console.log('calibrating...');
+    debug.innerHTML = 'calibrating...';
   }
-
   face.render();
+
+  game.update(dt);
   game.render();
 
 });
