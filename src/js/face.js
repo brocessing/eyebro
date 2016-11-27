@@ -1,8 +1,29 @@
 var Tracker = require('./tracker');
 var MathUtils = require('./math.js')();
+var TinyEmitter = require('tiny-emitter');
+
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
 
 function Face(opts) {
-  var tracker = Tracker({ webcam: opts.src });
+  var emitter = new TinyEmitter();
+
+  var tracker;
+  if (navigator.getUserMedia) {
+    navigator.getUserMedia({video: true}, handleVideo, handleError);
+
+    function handleVideo(stream) {
+      opts.webcam.src = window.URL.createObjectURL(stream);
+      tracker = Tracker({ src: opts.webcam });
+      emitter.emit('start');
+    }
+
+    function handleError(err) {
+      emitter.emit('error', err);
+    }
+  } else {
+    emitter.emit('error', 'unsupported browser');
+  }
+
   // see http://www.auduno.com/clmtrackr/docs/media/facemodel_numbering_new.png
   var paths = {
     // jaw: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
@@ -40,8 +61,12 @@ function Face(opts) {
       ny: 0,
     },
 
-    get src() { return opts.src; },
+    get src() { return opts.webcam; },
     get tracker() { return tracker; },
+
+    on: function(event, cb) {
+      emitter.on(event, cb);
+    },
 
     // update eyebrows position values
     update: function() {
@@ -89,10 +114,10 @@ function Face(opts) {
 
       if (tracker.points) {
         var src = {
-          x: opts.mirror ? opts.src.width : 0,
+          x: opts.mirror ? opts.webcam.width : 0,
           y: 0,
-          w: opts.mirror ? 0 : opts.src.width,
-          h: opts.src.height,
+          w: opts.mirror ? 0 : opts.webcam.width,
+          h: opts.webcam.height,
         };
 
         // draw face

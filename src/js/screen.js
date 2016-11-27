@@ -6,6 +6,7 @@ function Screen(selector, _visible = false) {
 
   var api = {
     visible : false,
+    get elem() { return elem; },
 
     on: function(event, cb) {
       emitter.on(event, cb);

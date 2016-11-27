@@ -1,33 +1,22 @@
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
-
 function Tracker(opts) {
-  // Access the webcam video stream
-  if (navigator.getUserMedia) {
-    navigator.getUserMedia({video: true}, handleVideo, function(e) { console.warn(e); });
+  var scoreThreshold = 0.3;
 
-    function handleVideo(stream) {
-      opts.webcam.src = window.URL.createObjectURL(stream);
-    }
+  // Define a new clemtracker object
+  // see http://www.auduno.com/clmtrackr/docs/reference.html#parameters
+  var ctracker = new clm.tracker({
+    constantVelocity  : true,
+    searchWindow      : 20,
+    useWebGL          : true,
+    scoreThreshold    : scoreThreshold,
+    stopOnConvergence : false,
+  });
 
-    var scoreThreshold = 0.3;
+  ctracker.init(pModel);
 
-    // Define a new clemtracker object
-    // see http://www.auduno.com/clmtrackr/docs/reference.html#parameters
-    var ctracker = new clm.tracker({
-      constantVelocity  : true,
-      searchWindow      : 20,
-      useWebGL          : true,
-      scoreThreshold    : scoreThreshold,
-      stopOnConvergence : false,
-    });
-
-    ctracker.init(pModel);
-
-    // improve tracking
-    // see http://www.auduno.com/clmtrackr/docs/reference.html#responses
-    // ctracker.setResponseMode('blend', ['sobel', 'lbp']);
-    ctracker.setResponseMode('single', ['raw']);
-  }
+  // improve tracking
+  // see http://www.auduno.com/clmtrackr/docs/reference.html#responses
+  // ctracker.setResponseMode('blend', ['sobel', 'lbp']);
+  ctracker.setResponseMode('single', ['raw']);
 
 
   var api = {
@@ -39,7 +28,7 @@ function Tracker(opts) {
     },
 
     update: function() {
-      ctracker.track(opts.webcam);
+      ctracker.track(opts.src);
       api.points = ctracker.getCurrentPosition();
       api.aabb = calcAABB(api.points);
     },

@@ -19,6 +19,37 @@ easing(duration) {
   background red
 }
 
+a {
+  text-decoration none
+  color inherit
+  easing(300)
+  &:hover {
+    color blue
+  }
+
+  &::before {
+    z-index -1
+    easing(300)
+    content ""
+    position absolute
+    width 100%
+    height 100%
+    // top -52%
+    top -10%
+    left 50%
+    opacity 0
+    border-bottom 0.25em solid red
+  }
+
+  &:hover {
+    cursor pointer
+    &::before {
+      left 0
+      opacity 1
+    }
+  }
+}
+
 // -------------------------------------------------------------------------
 
 body {
@@ -44,12 +75,14 @@ section.screen {
   bottom 0
   text-align center
 
+  visiblity hidden
   opacity 0
   transform: translateY(-50%);
   &.show {
     easing(500)
     z-index 2
     opacity 1
+    visiblity visible
     transform: translateY(0%);
   }
 
@@ -68,6 +101,11 @@ section.screen {
     text-align right
   }
 
+  .error {
+    display none
+    letter-spacing 0.125em
+    font-size smaller
+  }
 
   .wrapper {
     position absolute
@@ -145,6 +183,16 @@ section.screen {
         }
       }
     }
+  }
+}
+
+
+section.screen#welcome.error {
+  .error {
+    display block
+  }
+  button {
+    display none
   }
 }
 
