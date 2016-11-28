@@ -7,13 +7,13 @@ function Game(_opts) {
   var opts = Object.assign({
     canvas       : null,
 
-    godmode      : false,
+    godmode      : true,
     autoSpeed    : true,
 
     tileSize     : 100,
     jumpSpeed    : 15,
     initialSpeed : 5.0,
-    maxSpeed     : 10.0,
+    maxSpeed     : 30.0,
     acceleration : 0.01,
 
     y            : 500,
@@ -45,7 +45,8 @@ function Game(_opts) {
   var emitter = new TinyEmitter();
   var ctx = opts.canvas.getContext('2d');
 
-  var distance = 0, speed = opts.initialSpeed;
+  var distance = 0;
+  var speed = opts.initialSpeed;
   var ball = Ball(opts.ball);
 
   // -------------------------------------------------------------------------
@@ -118,7 +119,7 @@ function Game(_opts) {
         distance += speed;
 
         var collide = ball.y > -100 && (tiles[getCurrentTileIndex()] && touch(getCurrentTileIndex(), 3));
-        ball.update(dt, collide || opts.godmode);
+        ball.update(dt, speed, collide || opts.godmode);
 
         if (ball.y < -600) {
           api.stop();
@@ -172,18 +173,20 @@ function Game(_opts) {
           }
         }
       }
-
       ctx.stroke();
 
-      // BALL RENDERING
-      ctx.strokeStyle = opts.colors.ball;
-      ctx.lineWidth = Math.floor(M.map(ball.dy, 0, 10, opts.ball.radius, opts.ball.radius * opts.ball.stretch));
-      ctx.beginPath();
-      var ballY = opts.y + getHeight(opts.ball.x + distance) - (opts.ball.radius / 2) - (opts.weight / 2) - ball.y;
-      var pballY = Math.min(trailMax, opts.y + getHeight(opts.ball.x + distance) - ball.trail)  - (opts.ball.radius / 2) - (opts.weight / 2);
-      ctx.moveTo(opts.ball.x, ballY);
-      ctx.lineTo(opts.ball.x - M.map(ball.dy, 0, 10, 0, 5), pballY);
-      ctx.stroke();
+      var floorY = getHeight(opts.ball.x + distance);
+      var ballY  = opts.y + floorY - (opts.ball.radius / 2) - (opts.weight / 2) - ball.y;
+      var pballY = Math.min(trailMax, opts.y + floorY - ball.trail)  - (opts.ball.radius / 2) - (opts.weight / 2);
+      ball.render({
+        canvas: opts.canvas,
+        ctx: ctx,
+        color: opts.colors.ball,
+        x: opts.ball.x,
+        y: ballY,
+        py: pballY,
+        floorY: opts.y + floorY,
+      });
     },
   };
 
