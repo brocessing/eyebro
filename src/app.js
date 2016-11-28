@@ -86,6 +86,7 @@ function initGame() {
 
   screens.game.on('show', function() {
     var score = screens.game.querySelectorAll('#score')[0];
+    var wahou = screens.game.querySelectorAll('.wahou')[0];
 
     var game = Game({
       canvas: canvases.game,
@@ -101,7 +102,21 @@ function initGame() {
       game.update(dt);
       game.render();
 
+      // score handling
       score.innerHTML = game.score;
+      console.log(game.score, game.nextScore);
+      if (game.score > game.nextScore) {
+        game.nextScore *= 2;
+
+        wahou.classList.remove('show');
+
+        // wahou.innerHTML = Math.floor(Math.random() * 100);
+
+        // css anim reset hack
+        // see https://css-tricks.com/restart-css-animation/#article-header-id-0
+        void wahou.offsetWidth;
+        wahou.classList.add('show');
+      }
     });
 
     game.start();
@@ -114,6 +129,14 @@ function initGame() {
         screens.game.show();
       });
       screens.end.show();
+    });
+
+    // DEBUG
+    window.document.addEventListener('keypress', function(e) {
+      if (e.key === ' ') {
+        game.jump();
+        e.preventDefault();
+      }
     });
 
   });

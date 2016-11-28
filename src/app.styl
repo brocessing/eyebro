@@ -102,6 +102,25 @@ section.screen {
     text-align right
   }
 
+  @keyframes wahou {
+    0%   { opacity : 0; font-size : 1vw; }
+    80%  { opacity : 1; font-size : 20vw; }
+    100% { opacity : 0; font-size : 100vw; }
+  }
+  .wahou {
+    pointer-events none
+    position fixed
+    top 50%
+    left 50%
+    transform translateX(-50%) translateY(-50%)
+    text-align center;
+    opacity 0;
+    &.show {
+      animation: wahou 1s 1;
+      animation-timing-function: cubic-bezier(0.250, 0.100, 0.250, 1.000);
+    }
+  }
+
   .error {
     display none
     letter-spacing 0.125em

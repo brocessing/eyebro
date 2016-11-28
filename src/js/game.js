@@ -15,6 +15,7 @@ function Game(_opts) {
     initialSpeed : 5.0,
     maxSpeed     : 30.0,
     acceleration : 0.01,
+    nextScore    : 1000,
 
     y            : 500,
     width        : 9999999,
@@ -90,6 +91,8 @@ function Game(_opts) {
     running: false,
     get distance() { return distance; },
     get score() { return distance.toFixed(0); },
+    get nextScore() { return opts.nextScore; },
+    set nextScore(s) { opts.nextScore = s; },
 
     on: function(event, cb) {
       emitter.on(event, cb);
