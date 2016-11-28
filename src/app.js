@@ -78,9 +78,15 @@ face.on('error', function(err) {
 // -------------------------------------------------------------------------
 // GAME ENGINE INIT
 function initGame() {
-  var startBtn = screens.home.querySelectorAll('button#start')[0];
-  startBtn.addEventListener('click', function() {
+  var tutoBtn = screens.home.querySelectorAll('button#start')[0];
+  tutoBtn.addEventListener('click', function() {
     screens.home.hide();
+    screens.tuto.show();
+  });
+
+  var playBtn = screens.tuto.querySelectorAll('button#start')[0];
+  playBtn.addEventListener('click', function() {
+    screens.tuto.hide();
     screens.game.show();
   });
 

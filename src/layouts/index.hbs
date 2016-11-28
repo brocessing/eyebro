@@ -7,6 +7,10 @@
   {{#if compiler.isProduction}}
   <link rel="stylesheet" href="bundle-{{compiler.hash}}.css">
   {{/if}}
+
+  <script type="text/javascript">
+    // console.log({{description}});
+  </script>
 </head>
 
 <body>
@@ -35,6 +39,23 @@
         <button id="start">1 player</button><button disabled>2 players</button>
         <div class="error">{{error}}</div>
         <!-- <a href="#">how to play</a> -->
+      </div>
+    </section>
+
+    <section class="screen" id="tuto">
+      <a href="./" class="logo">
+        <svg viewBox="0 0 145 48">
+          <g transform="translate(0.000000, -13.000000)">
+            <text font-family="Roboto" font-size="48" font-style="italic" font-weight="686" fill="#FFA5A5"><tspan x="0" y="50">eyebro</tspan></text>
+            <path class="eyebrows" d="M10,16 C10,16 14.4198834,20.5 19.5586093,16" stroke="#FFA5A5" stroke-width="5" stroke-linecap="round" transform="translate(14.779305, 17.000000) rotate(-180.000000) translate(-14.779305, -17.000000) "></path>
+            <path class="eyebrows" d="M61,16 C61,16 65.4198834,20.5 70.5586093,16" stroke="#FFA5A5" stroke-width="5" stroke-linecap="round" transform="translate(65.779305, 17.000000) rotate(-180.000000) translate(-65.779305, -17.000000) "></path>
+          </g>
+        </svg>
+      </a>
+
+      <div class="wrapper">
+
+        <button id="start">let's go !</button>
       </div>
     </section>
 
