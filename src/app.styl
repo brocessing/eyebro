@@ -27,7 +27,7 @@ a {
     color blue
   }
 
-  &::before {
+  &:not(.btn)::before {
     z-index -1
     easing(300)
     content ""
@@ -233,4 +233,20 @@ footer {
   position fixed
   bottom 2vw
   right 2vw
+  svg {
+    #veine {
+      easing(300)
+      stroke red
+      opacity 0
+    }
+    stroke blue
+    width 4vw
+    height 4vw
+  }
+
+  &:hover {
+    svg #veine {
+      opacity 1
+    }
+  }
 }
