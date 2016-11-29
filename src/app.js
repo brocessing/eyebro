@@ -101,9 +101,9 @@ function initGame() {
     raf.add(function(dt) {
       dt = Math.min(dt, 50);
 
-      if (face.calibrated) {
-        if (face.eyebrows.ny > 0.75) game.jump();
-      }
+      // if (face.calibrated) {
+      //   if (face.eyebrows.ny > 0.75) game.jump();
+      // }
 
       game.update(dt);
       game.render();
