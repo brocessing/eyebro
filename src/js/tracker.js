@@ -12,6 +12,7 @@ function Tracker(opts) {
   });
 
   ctracker.init(pModel);
+  ctracker.start(opts.src);
 
   // improve tracking
   // see http://www.auduno.com/clmtrackr/docs/reference.html#responses
@@ -28,7 +29,7 @@ function Tracker(opts) {
     },
 
     update: function() {
-      ctracker.track(opts.src);
+      // ctracker.track(opts.src);
       api.points = ctracker.getCurrentPosition();
       api.aabb = calcAABB(api.points);
     },

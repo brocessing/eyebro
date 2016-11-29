@@ -63,7 +63,7 @@ face.on('start', function() {
 
   raf.add(function (dt) {
     face.update();
-    face.tracker.render(canvases.tracker, canvases.tracker.ctx);
+    // face.tracker.render(canvases.tracker, canvases.tracker.ctx);
 
     face.render();
   });
@@ -110,7 +110,6 @@ function initGame() {
 
       // score handling
       score.innerHTML = game.score;
-      console.log(game.score, game.nextScore);
       if (game.score > game.nextScore) {
         game.nextScore *= 2;
 
