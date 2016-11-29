@@ -5,20 +5,25 @@ function Tracker(opts) {
   // see http://www.auduno.com/clmtrackr/docs/reference.html#parameters
   var ctracker = new clm.tracker({
     constantVelocity  : true,
-    searchWindow      : 20,
+    searchWindow      : 18,
     useWebGL          : true,
     scoreThreshold    : scoreThreshold,
     stopOnConvergence : false,
+    faceDetection : {
+      workSize : 160,
+      minScale : 2,
+      scaleFactor : 1.15,
+      useCanny : true, // false
+      edgesDensity : 0.20, // 0.13
+      equalizeHistogram : true,
+    },
   });
-
   ctracker.init(pModel);
-  ctracker.start(opts.src);
-
   // improve tracking
   // see http://www.auduno.com/clmtrackr/docs/reference.html#responses
   // ctracker.setResponseMode('blend', ['sobel', 'lbp']);
   ctracker.setResponseMode('single', ['raw']);
-
+  ctracker.start(opts.src);
 
   var api = {
     aabb: null,
@@ -29,7 +34,6 @@ function Tracker(opts) {
     },
 
     update: function() {
-      // ctracker.track(opts.src);
       api.points = ctracker.getCurrentPosition();
       api.aabb = calcAABB(api.points);
     },
