@@ -7,7 +7,7 @@ function Game(_opts) {
   var opts = Object.assign({
     canvas       : null,
 
-    godmode      : true,
+    godmode      : false,
     autoSpeed    : true,
 
     tileSize     : 100,
@@ -15,7 +15,7 @@ function Game(_opts) {
     initialSpeed : 5.0,
     maxSpeed     : 30.0,
     acceleration : 0.01,
-    nextScore    : 1000,
+    nextScore    : 2000,
 
     y            : 500,
     width        : 9999999,
