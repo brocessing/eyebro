@@ -10,9 +10,10 @@ npm run start
 ```
 
 #### To Do
-
-- Bouncy plateforms
-- Score (and highscore?) system
-- Face tracking implementation
-- Sound design
-- Splash screen
+- [x] Bouncy plateforms
+- [x] Score (and highscore?) system
+- [x] Face tracking implementation
+- [x] Splash screen
+- [ ] Sound design
+- [ ] Improve CSS animations
+- [ ] Improve tracking (by create new models?)
