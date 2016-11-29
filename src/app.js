@@ -63,7 +63,7 @@ face.on('start', function() {
 
   raf.add(function (dt) {
     face.update();
-    // face.tracker.render(canvases.tracker, canvases.tracker.ctx);
+    face.tracker.render(canvases.tracker, canvases.tracker.ctx);
 
     face.render();
   });
