@@ -65,7 +65,7 @@ function Game(_opts) {
         next++;
       } else {
         tiles.push(true);
-        next = Math.floor(Math.random() * 7) - ((Math.random() > 0.9) ? 2 : 1);
+        next = Math.floor(Math.random() * 7) - ((Math.random() > 0.9) ? M.map(i, 0, opts.width, 1, 10) : 1);
       }
     }
 

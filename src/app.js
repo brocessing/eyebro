@@ -93,9 +93,12 @@ function initGame() {
     var wahou = screens.game.querySelectorAll('.wahou')[0];
 
     var sound = Sound();
-    // sound.on('load', function(e) {});
     game.on('jump', function() { if (game.running) sound.play('jump1'); });
     game.on('bounce', function() { if (game.running) sound.play('bounce' + Math.ceil(Math.random() * 3)); });
+    // game.on('stop', function() { sound.stopLoop(); });
+    sound.on('load', function(e) {
+      if (e.id === 'loop') sound.startLoop();
+    });
 
     raf.add(function(dt) {
       dt = Math.min(dt, 50);
@@ -127,6 +130,7 @@ function initGame() {
     game.start();
 
     game.on('loose', function() {
+
       screens.game.hide();
       var twitterURL = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('my eyebrows are so bros they did ' + game.score + ' points, on ' + window.location.href);
       screens.end.querySelectorAll('#score > a')[0].setAttribute('href', twitterURL);
