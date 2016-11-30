@@ -32,8 +32,6 @@ function SoundWrapper() {
     },
 
     play: function(soundID) {
-      // var sound = api.getSound(soundID);
-      console.log(soundID);
       createjs.Sound.play(soundID);
     },
   };
