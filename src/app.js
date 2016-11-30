@@ -19,7 +19,6 @@ var screens = {
 var canvases = {
   face    : window.document.getElementById('canvasFaces'),
   game    : window.document.getElementById('canvasGame'),
-  tracker : window.document.getElementById('canvasTracker'),
 };
 
 (function setCanvasesSize() {
@@ -48,23 +47,13 @@ var face = Face({
   webcam: webcam,
   color: '#C8E7ED',
   lineWidth: 10,
-  mirror: true,
+  mirror: false,
   samplingLength: 100,
 });
 
 face.on('start', function() {
-  (function setDebugCanvasSize() {
-    canvases.tracker.width        = webcam.width;
-    canvases.tracker.height       = webcam.height;
-    canvases.tracker.style.width  = canvases.tracker.width;
-    canvases.tracker.style.height = canvases.tracker.height;
-    canvases.tracker.ctx          = canvases.tracker.getContext('2d');
-  })();
-
   raf.add(function (dt) {
     face.update();
-    face.tracker.render(canvases.tracker, canvases.tracker.ctx);
-
     face.render();
   });
 

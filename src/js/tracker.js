@@ -1,11 +1,11 @@
 function Tracker(opts) {
-  var scoreThreshold = 0.3;
+  var scoreThreshold = 0.4;
 
   // Define a new clemtracker object
   // see http://www.auduno.com/clmtrackr/docs/reference.html#parameters
   var ctracker = new clm.tracker({
     constantVelocity  : true,
-    searchWindow      : 18,
+    searchWindow      : 11,
     useWebGL          : true,
     scoreThreshold    : scoreThreshold,
     stopOnConvergence : false,
@@ -14,7 +14,7 @@ function Tracker(opts) {
       minScale : 2,
       scaleFactor : 1.15,
       useCanny : true, // false
-      edgesDensity : 0.20, // 0.13
+      edgesDensity : 1, // 0.13
       equalizeHistogram : true,
     },
   });

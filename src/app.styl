@@ -60,12 +60,25 @@ body {
   overflow hidden
 }
 
-.debug
-    // display none
-  video#webcam
-    position absolute
-  #canvasTracker
-    position absolute
+
+video#webcam
+  z-index -1
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height 100%
+  display none
+
+input#showWebcam {
+  z-index 99
+  position fixed
+  top 0
+  left 50vw
+  &:checked~video#webcam {
+    display block
+  }
+}
 
 
 section.screen {
