@@ -2,6 +2,7 @@ var raf    = require('raf');
 var Screen = require('./js/screen');
 var Face   = require('./js/face');
 var Game   = require('./js/game');
+var Sound  = require('./js/soundwrapper')
 
 // -------------------------------------------------------------------------
 // SCREENS INIT
@@ -117,6 +118,23 @@ function initGame() {
       }
     });
 
+
+    var sound = Sound();
+    // sound.on('load', function(e) {});
+
+    game.on('jump', function() {
+      if (game.running) {
+        sound.play('jump' + Math.ceil(Math.random() * 2));
+      }
+    });
+
+    game.on('bounce', function() {
+      if (game.running) {
+        sound.play('bounce' + Math.ceil(Math.random() * 3));
+      }
+    });
+
+    // -------------
     game.start();
 
     game.on('loose', function() {

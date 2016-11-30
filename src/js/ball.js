@@ -32,6 +32,8 @@ function Ball(opts) {
         }
       }
 
+      collid = false;
+
       // ball update
       py = y;
       velocity -= opts.gravity * (dt/1000) * 30;
@@ -40,6 +42,7 @@ function Ball(opts) {
       if (floor && y <= 0) {
         if (py > 2) {
           splashes.push(Splash(api.dy * 3, api.dy * 100, speed));
+          collid = true;
         }
 
         var k = -20;
@@ -59,7 +62,7 @@ function Ball(opts) {
       pushTrail(this.py);
 
       if (y > opts.jumpMax) canJump = false;
-      return api;
+      return collid;
     },
 
     render: function(param) {

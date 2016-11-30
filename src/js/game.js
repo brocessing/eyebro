@@ -112,7 +112,10 @@ function Game(_opts) {
       emitter.emit('loose');
     },
 
-    jump: function(acc = 80) { ball.jump(acc); },
+    jump: function(acc = 80) {
+      ball.jump(acc);
+      if (ball.py <= 0) emitter.emit('jump');
+    },
 
     update: function(dt) {
       if (api.running) {
@@ -120,7 +123,8 @@ function Game(_opts) {
         distance += speed;
 
         var collide = ball.y > -100 && (tiles[getCurrentTileIndex()] && touch(getCurrentTileIndex(), 3));
-        ball.update(dt, speed, collide || opts.godmode);
+        var bounce = ball.update(dt, speed, collide || opts.godmode);
+        if (bounce) emitter.emit('bounce');
 
         if (ball.y < -600) {
           api.stop();
