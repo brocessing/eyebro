@@ -54,12 +54,8 @@ function Face(opts) {
   var api = {
     calibrated: false,
     eyebrows: {
-      initial: 0,
-      samples: [],
       y: 0,
-      ymax: Number.POSITIVE_INFINITY,
-      dy: 0,
-      ny: 0,
+      ymax: 13,
     },
 
     get src() { return opts.webcam; },
@@ -80,31 +76,19 @@ function Face(opts) {
         var noseY = tracker.points[33][1];
         api.eyebrows.y = Math.abs((noseY - averageY) / tracker.aabb.height) * 100;
 
-        if (api.calibrated === false) api.calibrate();
-        else {
-          api.eyebrows.dy = api.eyebrows.y.toFixed(0) - api.eyebrows.initial;
-          var ny = MathUtils.norm(api.eyebrows.y, api.eyebrows.initial, api.eyebrows.ymax)
-          api.eyebrows.ny = MathUtils.constrain(ny, 0, 1);
-        }
+        api.calibrate();
+      } else {
+        api.recalibrate();
       }
     },
 
     calibrate: function() {
-      if (api.eyebrows.samples.length < opts.samplingLength) {
-        // sample eyebrows position
-        api.eyebrows.samples.push(api.eyebrows.y);
-      } else {
-        // sampling done, calculate initial eyebrows position
-        api.eyebrows.initial = getMostCommonValue(api.eyebrows.samples, 0);
-        api.eyebrows.ymax = getMaxValue(api.eyebrows.samples);
-        api.calibrated = true;
+      if (api.eyebrows.y > api.eyebrows.ymax) {
+        api.eyebrows.ymax = api.eyebrows.y;
       }
     },
 
-    recalibrate: function() {
-      api.eyebrows.samples = [];
-      api.calibrated = false;
-    },
+    recalibrate: function() { api.eyebrows.ymax = 13; },
 
     render: function() {
       ctx.clearRect(0, 0, opts.canvas.width, opts.canvas.height);

@@ -64,6 +64,10 @@ face.on('error', function(err) {
   screens.home.elem.classList.add('error');
 });
 
+window.document.getElementById('showWebcamLabel').addEventListener('click', function() {
+  webcam.debug = (!window.document.getElementById('showWebcam').checked);
+});
+
 // -------------------------------------------------------------------------
 // GAME ENGINE INIT
 function initGame() {
@@ -90,15 +94,15 @@ function initGame() {
     raf.add(function(dt) {
       dt = Math.min(dt, 50);
 
-      // if (face.calibrated) {
-      //   if (face.eyebrows.ny > 0.75) game.jump();
-      // }
+      if (face.eyebrows.y > face.eyebrows.ymax * 0.9) {
+        game.jump();
+      }
 
       game.update(dt);
       game.render();
 
       // score handling
-      score.innerHTML = game.score;
+      score.innerHTML = game.score + (webcam.debug ? ' (y : ' + face.eyebrows.y.toFixed(1) + ' / ' + face.eyebrows.ymax.toFixed(1) + ')' : '');
       if (game.score > game.nextScore) {
         game.nextScore *= 2;
 
