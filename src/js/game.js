@@ -114,7 +114,7 @@ function Game(_opts) {
 
     jump: function(acc = 80) {
       ball.jump(acc);
-      if (ball.py <= 0) emitter.emit('jump');
+      emitter.emit('jump');
     },
 
     update: function(dt) {

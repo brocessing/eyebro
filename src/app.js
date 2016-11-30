@@ -94,7 +94,7 @@ function initGame() {
 
     var sound = Sound();
     // sound.on('load', function(e) {});
-    game.on('jump', function() { if (game.running) sound.play('jump' + Math.ceil(Math.random() * 2)); });
+    game.on('jump', function() { if (game.running) sound.play('jump1'); });
     game.on('bounce', function() { if (game.running) sound.play('bounce' + Math.ceil(Math.random() * 3)); });
 
     raf.add(function(dt) {

@@ -4,19 +4,22 @@ function SoundWrapper() {
   var emitter = new TinyEmitter();
   var audioPath = "assets/sounds/";
   var sounds = [
-    {id: 'wow', src:'wow.ogg', playing: false},
-    {id: 'jump1', src:'jump_1.ogg', playing: false},
-    {id: 'jump2', src:'jump_2.ogg', playing: false},
-    {id: 'bounce1', src:'bounce_1.ogg', playing: false},
-    {id: 'bounce2', src:'bounce_2.ogg', playing: false},
-    {id: 'bounce3', src:'bounce_3.ogg', playing: false},
+    {id: 'wow', src:'wow.ogg', data:1},
+    {id: 'jump1', src:'jump_1.ogg', data:1},
+    {id: 'jump2', src:'jump_2.ogg', data:1},
+    {id: 'bounce1', src:'bounce_1.ogg', data:1},
+    {id: 'bounce2', src:'bounce_2.ogg', data:1},
+    {id: 'bounce3', src:'bounce_3.ogg', data:1},
   ];
 
   createjs.Sound.addEventListener('fileload', function(event) {
     emitter.emit('load', event);
   });
 
-  createjs.Sound.registerSounds(sounds, audioPath);
+  for (var i = 0, l = sounds.length; i < l; i++) {
+    var s = sounds[i];
+    createjs.Sound.registerSound(audioPath + s.src, s.id, 1);
+  }
 
   var api = {
     on: function(event, cb) { emitter.on(event, cb); },
@@ -29,13 +32,9 @@ function SoundWrapper() {
     },
 
     play: function(soundID) {
-      var sound = api.getSound(soundID);
-      if (!sound.playing) {
-        sound.playing = true;
-        createjs.Sound.play(soundID).on('complete', function() {
-          sound.playing = false;
-        });
-      }
+      // var sound = api.getSound(soundID);
+      console.log(soundID);
+      createjs.Sound.play(soundID);
     },
   };
 
