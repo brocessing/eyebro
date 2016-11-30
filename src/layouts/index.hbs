@@ -16,7 +16,8 @@
 <body>
   <main>
     <canvas id="canvasFaces"></canvas>
-    <input type="checkbox" id="showWebcam">
+    <input type="checkbox" id="showWebcam" name="showWebcam">
+    <label for="showWebcam">show webcam</label>
     <video id="webcam" width="640" height="480" autoplay="true"></video>
 
     <section class="screen" id="welcome">
@@ -110,7 +111,7 @@
       </div>
     </section>
 
-    <footer>
+    <section class="modal" id="about">
       <a href="https://github.com/brocessing" class="btn">
         <svg viewBox="0 0 395 240">
           <g transform="translate(4.000000, 4.000000)" fill="none" stroke-linecap="round">
@@ -125,6 +126,10 @@
           </g>
         </svg>
       </a>
+    </section>
+
+    <footer>
+      <a href="#" id="about">about</a>
     </footer>
 
   </main>

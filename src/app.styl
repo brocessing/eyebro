@@ -19,7 +19,7 @@ easing(duration) {
   background red
 }
 
-a {
+a, label {
   text-decoration none
   color inherit
   easing(300)
@@ -71,15 +71,19 @@ video#webcam
   display none
 
 input#showWebcam {
-  z-index 99
-  position fixed
-  top 0
-  left 50vw
+  display none
   &:checked~video#webcam {
     display block
   }
 }
 
+label[for="showWebcam"] {
+  z-index 99
+  position fixed
+  bottom 2vw
+  left 2vw
+  cursor pointer
+}
 
 section.screen {
   position fixed
@@ -196,6 +200,11 @@ section.screen {
         &::before {
           left 0
           opacity 1
+        }
+
+        &:disabled {
+          cursor wait
+          opacity 0.3
         }
       }
     }
