@@ -85,12 +85,17 @@ function initGame() {
   });
 
   screens.game.on('show', function() {
-    var score = screens.game.querySelectorAll('#score')[0];
-    var wahou = screens.game.querySelectorAll('.wahou')[0];
-
     var game = Game({
       canvas: canvases.game,
     });
+
+    var score = screens.game.querySelectorAll('#score')[0];
+    var wahou = screens.game.querySelectorAll('.wahou')[0];
+
+    var sound = Sound();
+    // sound.on('load', function(e) {});
+    game.on('jump', function() { if (game.running) sound.play('jump' + Math.ceil(Math.random() * 2)); });
+    game.on('bounce', function() { if (game.running) sound.play('bounce' + Math.ceil(Math.random() * 3)); });
 
     raf.add(function(dt) {
       dt = Math.min(dt, 50);
@@ -115,26 +120,10 @@ function initGame() {
         // see https://css-tricks.com/restart-css-animation/#article-header-id-0
         void wahou.offsetWidth;
         wahou.classList.add('show');
+        sound.play('wow');
       }
     });
 
-
-    var sound = Sound();
-    // sound.on('load', function(e) {});
-
-    game.on('jump', function() {
-      if (game.running) {
-        sound.play('jump' + Math.ceil(Math.random() * 2));
-      }
-    });
-
-    game.on('bounce', function() {
-      if (game.running) {
-        sound.play('bounce' + Math.ceil(Math.random() * 3));
-      }
-    });
-
-    // -------------
     game.start();
 
     game.on('loose', function() {
