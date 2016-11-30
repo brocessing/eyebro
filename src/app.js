@@ -121,20 +121,14 @@ function initGame() {
 
     game.on('loose', function() {
       screens.game.hide();
-      screens.end.querySelectorAll('#score')[0].innerHTML = game.score;
+      var twitterURL = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('my eyebrows are so bros they did ' + game.score + ' points, on ' + window.location.href);
+      screens.end.querySelectorAll('#score > a')[0].setAttribute('href', twitterURL);
+      screens.end.querySelectorAll('#scoreValue')[0].innerHTML = game.score;
       screens.end.querySelectorAll('button#retry')[0].addEventListener('click', function() {
         screens.end.hide();
         screens.game.show();
       });
       screens.end.show();
-    });
-
-    // DEBUG
-    window.document.addEventListener('keypress', function(e) {
-      if (e.key === ' ') {
-        game.jump();
-        e.preventDefault();
-      }
     });
 
   });

@@ -21,7 +21,7 @@ function Tracker(opts) {
   ctracker.init(pModel);
   // improve tracking
   // see http://www.auduno.com/clmtrackr/docs/reference.html#responses
-  // ctracker.setResponseMode('blend', ['sobel', 'lbp']);
+  // ctracker.setResponseMode('blend', ['raw', 'sobel']);
   ctracker.setResponseMode('single', ['raw']);
   ctracker.start(opts.src);
 
