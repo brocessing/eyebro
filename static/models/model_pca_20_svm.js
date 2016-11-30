@@ -539,7 +539,8 @@ var pModel = {
       2.6395798573836098, 
       2.4414195196560233
     ], 
-    "numPtsPerSample": 71, 
+    "numPtsPerSample": 71,
+    // 9 & 11 are vectors for eyebrow (?)
     "nonRegularizedVectors": [0, 9, 11], 
     "meanShape": [
       [25.011254225136952, 34.815173567571549], 
