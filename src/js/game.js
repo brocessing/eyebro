@@ -12,7 +12,7 @@ function Game(_opts) {
 
     tileSize     : 100,
     jumpSpeed    : 15,
-    initialSpeed : 5.0,
+    initialSpeed : 7.0,
     maxSpeed     : 30.0,
     acceleration : 0.01,
     nextScore    : 2000,
@@ -35,7 +35,7 @@ function Game(_opts) {
       x             : 200,
       trailLength   : 3,
       radius        : 25,
-      gravity       : 9.81,
+      gravity       : 9.81 * 0.75,
       bounce        : 0.5,
       jumpMax       : 50,
       aerial        : 0.35,
@@ -54,7 +54,7 @@ function Game(_opts) {
 
   var tiles = (function() {
     var tiles = [];
-    var next = Math.floor(window.innerWidth * 0.5 / opts.tileSize);
+    var next = Math.floor(window.innerWidth / opts.tileSize);
 
     for (var i = 0; i < opts.width; i += opts.tileSize) {
       if (next > 0) {
@@ -65,10 +65,8 @@ function Game(_opts) {
         next++;
       } else {
         tiles.push(true);
-        next = Math.floor(Math.random() * 7) - 2;
+        next = Math.floor(Math.random() * 7) - ((Math.random() > 0.9) ? 2 : 1);
       }
-
-      // tiles.push(true);
     }
 
     return tiles;
