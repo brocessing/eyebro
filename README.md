@@ -24,6 +24,8 @@ npm install
 npm run start
 ```
 
+Or just go play online on ![eyebro website](https://brocessing.github.io/eyebro/)
+
 ### To Do
 - [x] Bouncy plateforms
 - [x] Score (and highscore?) system
